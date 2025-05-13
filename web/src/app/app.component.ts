@@ -22,11 +22,29 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 })
 
 export class AppComponent { 
+    // configuration variables
+    filepathPlug = "Here will be filepath of selected file";
+
     protocol = "";
-    action = ""
+    action = "";
+    filepath = this.filepathPlug;
     resultIsDone = true;
+    file: any;
+
+    uploadFile(event) {
+        this.file = event.target.files[0];
+        this.filepath = this.file.name;
+    }
 
     doAction(): void {
         this.resultIsDone = !this.resultIsDone
+        let fileReader = new FileReader();
+        fileReader.onload = (e) => {
+            console.log(fileReader.result);
+        }
+        let s: string;
+        fileReader.readAsText(this.file, s);
+        fileReader.readAsArrayBuffer(this.file);
+        console.log(s)
     }
 }

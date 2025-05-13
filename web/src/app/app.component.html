@@ -20,10 +20,13 @@
                 <div>
                     <button
                         mat-flat-button
-                        [disabled]="protocol===''">
+                        [disabled]="protocol===''"
+                        (click)="fileInput.click()">
                             Select file
                     </button>
+                    <input type="file" accept=".txt" hidden #fileInput (change)="uploadFile($event)">
                 </div>
+                <div>{{filepath}}</div>
                 <div>
                     <mat-button-toggle-group
                         hideSingleSelectionIndicator
