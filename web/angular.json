@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "projects": {
+    "file_crypter": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": "src",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "web/dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": ["zone.js"],
+            "tsConfig": "tsconfig.json",
+            "aot": true
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "buildTarget": "file_crypter:build"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": "f8908d22-df5f-41b9-bdd4-164f0db97a88"
+  }
+}
