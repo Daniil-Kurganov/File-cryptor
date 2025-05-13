@@ -1,14 +1,32 @@
 import { Component } from "@angular/core";
 import {FormsModule} from "@angular/forms";
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
      
 @Component({
     selector: "file_crypter",
     standalone: true,
-    imports: [FormsModule],
-    template: `<label>Введите имя:</label>
-                 <input [(ngModel)]="name" placeholder="name">
-                 <h1>Добро пожаловать {{name}}!</h1>`
+    imports: [
+        FormsModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatButtonToggleModule
+    ],
+    templateUrl: `./app.component.html`,
+    styleUrl: `./app.component.css`
 })
+
 export class AppComponent { 
-    name= "";
+    protocol = "";
+    action = ""
+    resultIsDone = true;
+
+    doAction(): void {
+        this.resultIsDone = !this.resultIsDone
+    }
 }

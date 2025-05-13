@@ -1,0 +1,47 @@
+<div id="container">    
+    <div id="header">
+        <h1>FILE CRYPTER</h1>
+        <h2>Crossplatform universal tool for encryption and decryption TXT-files</h2>
+    </div>
+    <div id="body">
+        <mat-card>
+            <mat-card-content>
+                <div>
+                    <mat-form-field>
+                        <mat-label>Protocol</mat-label>
+                        <mat-select
+                            [(ngModel)]="protocol"
+                            required>
+                                <mat-option value="gost">GOST 28147</mat-option>
+                                <mat-option value="rsa">RSA</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <button
+                        mat-flat-button
+                        [disabled]="protocol===''">
+                            Select file
+                    </button>
+                </div>
+                <div>
+                    <mat-button-toggle-group
+                        hideSingleSelectionIndicator
+                        [(ngModel)]="action"
+                        [disabled]="protocol===''"
+                        (click)="doAction()">
+                            <mat-button-toggle value="encryption">Encryption</mat-button-toggle>
+                            <mat-button-toggle value="decryption">Decription</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+                <div>
+                    <button
+                        mat-flat-button
+                        [disabled]="resultIsDone">
+                            Upload result file
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
