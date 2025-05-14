@@ -42,9 +42,12 @@ export class AppComponent {
         fileReader.onload = (e) => {
             console.log(fileReader.result);
         }
-        let s: string;
-        fileReader.readAsText(this.file, s);
+        // fileReader.readAsText(this.file);
+        // let s = fileReader.result;
+        // console.log(s)
+
         fileReader.readAsArrayBuffer(this.file);
-        console.log(s)
+        let bytes = fileReader.result;
+        console.log(bytes);
     }
 }
