@@ -23,7 +23,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "file_crypter:build"
+            "buildTarget": "file_crypter:build",
+            "proxyConfig": "proxy.config.json"
           }
         }
       }

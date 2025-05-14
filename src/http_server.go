@@ -20,7 +20,7 @@ func HTTPServer() {
 	router := gin.Default()
 	crypter := router.Group("crypter")
 	{
-		crypter.GET("start", start)
+		crypter.POST("start", start)
 	}
 	var listener net.Listener
 	var err error
@@ -39,6 +39,11 @@ func start(gctx *gin.Context) {
 		log.Fatal(err.Error())
 	}
 	var request testRequest
-	json.Unmarshal(requestBytes, &request)
-	gctx.JSON(http.StatusOK, gost2814789.Encryption(request.Data))
+	if err = json.Unmarshal(requestBytes, &request); err != nil {
+		log.Fatal(err.Error())
+	}
+	log.Print(request)
+	response := gost2814789.Encryption(request.Data)
+	log.Print(response)
+	gctx.JSON(http.StatusOK, gin.H{"data": response})
 }

@@ -5,6 +5,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {HttpClient, HttpClientModule, HttpHandler } from "@angular/common/http";
      
 @Component({
     selector: "file_crypter",
@@ -15,7 +16,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
         MatFormFieldModule,
         MatSelectModule,
         MatButtonModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        HttpClientModule
     ],
     templateUrl: `./app.component.html`,
     styleUrl: `./app.component.css`
@@ -31,23 +33,50 @@ export class AppComponent {
     resultIsDone = true;
     file: any;
 
+    constructor(private http: HttpClient) {}
+
     uploadFile(event) {
         this.file = event.target.files[0];
         this.filepath = this.file.name;
     }
 
+    reader(file, callback) {
+        const fileReader = new FileReader();
+        fileReader.onload = () => callback(null, fileReader.result);
+        fileReader.onerror = (err) => callback(err);
+        fileReader.readAsArrayBuffer(file);
+    }
+
     doAction(): void {
         this.resultIsDone = !this.resultIsDone
-        let fileReader = new FileReader();
-        fileReader.onload = (e) => {
-            console.log(fileReader.result);
-        }
-        // fileReader.readAsText(this.file);
-        // let s = fileReader.result;
-        // console.log(s)
+        this.reader(this.file, (err, result) => {
+            const uintArray = new Uint8Array(result);
+            let body = {data: Array.from(uintArray)}
+            let response: number[];
+            this.http.post("crypter/start", body).subscribe({next:(data:any) => {
+                console.log(data);
+            },
+            error: error => console.log(error)});
+            console.log(response);
+        });
 
-        fileReader.readAsArrayBuffer(this.file);
-        let bytes = fileReader.result;
-        console.log(bytes);
+
+        // let fileReader = new FileReader();
+        // // fileReader.readAsText(this.file);
+        // fileReader.readAsArrayBuffer(this.file);
+        // let fileNumbers = fileReader.onload = function(): any {
+        //     // console.log(fileReader.result);
+        //     let fileData = fileReader.result as ArrayBuffer;
+        //     const uintArray = new Uint8Array(fileData);
+        //    return Array.from(uintArray)};
+        // } as number[];
+        // let response: number[];
+        // let body = {data: fileNumbers}
+        // console.log(body);
+        // this.http.post("crypter/start", body).subscribe({next:(data:any) => {
+        //     console.log(data);
+        // },
+        // error: error => console.log(error)});
+        // console.log(response);
     }
 }
