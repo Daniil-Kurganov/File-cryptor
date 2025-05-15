@@ -1,7 +1,7 @@
 <div id="container">    
     <div id="header">
-        <h1>FILE CRYPTER</h1>
-        <h2>Crossplatform universal tool for encryption and decryption TXT-files</h2>
+        <h1>TXT-ШИФР</h1>
+        <h2>Кроссплатформенная утилита для шифрования и расшифрования TXT-файлов</h2>
     </div>
     <div id="body">
         <mat-card>
@@ -9,11 +9,11 @@
                 <div id="card-content">
                     <div id="protocol">
                         <mat-form-field>
-                            <mat-label>Protocol</mat-label>
+                            <mat-label>Протокол</mat-label>
                             <mat-select
                                 [(ngModel)]="protocol"
                                 required>
-                                    <mat-option value="gost" (click)="selectGOST()">GOST 28147</mat-option>
+                                    <mat-option value="gost" (click)="selectGOST()">ГОСТ 28147</mat-option>
                                     <mat-option value="rsa">RSA</mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -24,9 +24,9 @@
                             mat-flat-button
                             [disabled]="uploadFileDisable"
                             (click)="fileInput.click()">
-                                Select file
+                                Выберите файл
                         </button>
-                        <input type="file" accept=".txt" hidden #fileInput (change)="uploadFile($event)">
+                        <input type="file" hidden #fileInput (change)="uploadFile($event)">
                     </div>
                     <div>
                         <mat-button-toggle-group
@@ -34,8 +34,8 @@
                             [(ngModel)]="action"
                             [disabled]="buttonsGroupDisable"
                             (click)="doAction()">
-                                <mat-button-toggle value="encryption">Encryption</mat-button-toggle>
-                                <mat-button-toggle value="decryption">Decription</mat-button-toggle>
+                                <mat-button-toggle value="encryption">Зашифровать</mat-button-toggle>
+                                <mat-button-toggle value="decryption">Расшифровать</mat-button-toggle>
                         </mat-button-toggle-group>
                     </div>
                     <div>
@@ -43,7 +43,7 @@
                             mat-flat-button
                             [disabled]="upladFileDisable"
                             (click)="fileDownload.click()">
-                                Upload result file
+                                Загрузить результат
                         </button>
                         <a [href]="resultFileURL" [download]="filenameDownload" hidden #fileDownload></a>
                     </div>
