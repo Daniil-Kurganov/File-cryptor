@@ -10,3 +10,22 @@
     margin: auto;
     width: 950px;
 }
+
+#card-content {
+    display: grid;
+    grid-template-columns: 3;
+    grid-template-rows: 3;
+}
+
+#protocol {
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+
+#upload-file {
+    grid-column-start: 2;
+}
+
+#filepath {
+    margin-bottom: 10px;
+}
