@@ -27,7 +27,7 @@ import { buffer } from "rxjs";
 
 export class AppComponent { 
     // configuration variables
-    filepathPlug = "Here will be filepath of selected file";
+    filepathPlug = "Здесь будет отображаться имя файла";
 
     protocol = "";
     action = "";
