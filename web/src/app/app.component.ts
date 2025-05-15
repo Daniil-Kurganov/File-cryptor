@@ -31,31 +31,32 @@ export class AppComponent {
 
     protocol = "";
     action = "";
+    filenameDownload = "";
     filepath = this.filepathPlug;
+    uploadFileDisable = true;
     resultIsDone = false;
+    buttonsGroupDisable = true;
+    upladFileDisable = true;
     file: any;
     resultFileURL;
-    filenameDownload = "";
 
     constructor(
         private http: HttpClient,
         private sanitizer: DomSanitizer
     ) {}
 
-    uploadFile(event) {
-        this.file = event.target.files[0];
-        this.filepath = this.file.name;
+    selectGOST() {
+        this.uploadFileDisable = false;
     }
 
-    reader(file, callback) {
-        const fileReader = new FileReader();
-        fileReader.onload = () => callback(null, fileReader.result);
-        fileReader.onerror = (err) => callback(err);
-        fileReader.readAsText(file);
+    uploadFile(event) {
+        this.upladFileDisable = true;
+        this.file = event.target.files[0];
+        this.filepath = this.file.name;
+        this.buttonsGroupDisable = false;
     }
 
     doAction(): void {
-        // this.resultIsDone = !this.resultIsDone
         if (this.action == "encryption") {
             this.reader(this.file, (err, result) => {
                 console.log(result);
@@ -79,5 +80,13 @@ export class AppComponent {
                 error: error => console.log(error)});
             });
         }
+        this.upladFileDisable = false;
+    }
+
+    reader(file, callback) {
+        const fileReader = new FileReader();
+        fileReader.onload = () => callback(null, fileReader.result);
+        fileReader.onerror = (err) => callback(err);
+        fileReader.readAsText(file);
     }
 }
