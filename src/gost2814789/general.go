@@ -1,5 +1,7 @@
 package gost2814789
 
+var sessionKey [][]byte
+
 func Encryption(openTextBlocks []uint64) (closeTextBlocks []uint64) {
 	sessioinKeyGeneration()
 	for _, currentOpenTextBlock := range openTextBlocks {

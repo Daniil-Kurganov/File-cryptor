@@ -1,0 +1,12 @@
+#container {
+    text-align: center;
+}
+
+#header {
+    margin-top: 150px;
+}
+
+#body {
+    margin: auto;
+    width: 950px;
+}
