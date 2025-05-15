@@ -6,6 +6,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {HttpClient, HttpClientModule, HttpHandler } from "@angular/common/http";
+import { DomSanitizer } from '@angular/platform-browser';
+import { buffer } from "rxjs";
      
 @Component({
     selector: "file_crypter",
@@ -30,10 +32,15 @@ export class AppComponent {
     protocol = "";
     action = "";
     filepath = this.filepathPlug;
-    resultIsDone = true;
+    resultIsDone = false;
     file: any;
+    resultFileURL;
+    filenameDownload = "";
 
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private sanitizer: DomSanitizer
+    ) {}
 
     uploadFile(event) {
         this.file = event.target.files[0];
@@ -44,39 +51,33 @@ export class AppComponent {
         const fileReader = new FileReader();
         fileReader.onload = () => callback(null, fileReader.result);
         fileReader.onerror = (err) => callback(err);
-        fileReader.readAsArrayBuffer(file);
+        fileReader.readAsText(file);
     }
 
     doAction(): void {
-        this.resultIsDone = !this.resultIsDone
-        this.reader(this.file, (err, result) => {
-            const uintArray = new Uint8Array(result);
-            let body = {data: Array.from(uintArray)}
-            let response: number[];
-            this.http.post("crypter/start", body).subscribe({next:(data:any) => {
-                console.log(data);
-            },
-            error: error => console.log(error)});
-            console.log(response);
-        });
-
-
-        // let fileReader = new FileReader();
-        // // fileReader.readAsText(this.file);
-        // fileReader.readAsArrayBuffer(this.file);
-        // let fileNumbers = fileReader.onload = function(): any {
-        //     // console.log(fileReader.result);
-        //     let fileData = fileReader.result as ArrayBuffer;
-        //     const uintArray = new Uint8Array(fileData);
-        //    return Array.from(uintArray)};
-        // } as number[];
-        // let response: number[];
-        // let body = {data: fileNumbers}
-        // console.log(body);
-        // this.http.post("crypter/start", body).subscribe({next:(data:any) => {
-        //     console.log(data);
-        // },
-        // error: error => console.log(error)});
-        // console.log(response);
+        // this.resultIsDone = !this.resultIsDone
+        if (this.action == "encryption") {
+            this.reader(this.file, (err, result) => {
+                console.log(result);
+                this.http.post(`crypter/encrypt?data=${result}`, null).subscribe({next:(data:any) => {
+                    console.log(data);
+                    const blob = new Blob([data], { type: 'application/octet-stream' });
+                    this.resultFileURL = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+                    this.filenameDownload = "encrypted.txt";
+                    },
+                    error: error => console.log(error)});
+            });
+        } else {
+            this.reader(this.file, (err, result) => {
+               const uintArray = new Uint8Array(result);
+                this.http.post(`crypter/decrypt?data=${result}`, null).subscribe({next:(data:any) => {
+                    console.log(data);
+                    const blob = new Blob([data], { type: 'application/octet-stream' });
+                    this.resultFileURL = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+                    this.filenameDownload = "decrypted.txt";
+                },
+                error: error => console.log(error)});
+            });
+        }
     }
 }

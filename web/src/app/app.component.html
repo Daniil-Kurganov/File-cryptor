@@ -40,9 +40,11 @@
                 <div>
                     <button
                         mat-flat-button
-                        [disabled]="resultIsDone">
+                        [disabled]="resultIsDone"
+                        (click)="fileDownload.click()">
                             Upload result file
                     </button>
+                    <a [href]="resultFileURL" [download]="filenameDownload" hidden #fileDownload></a>
                 </div>
             </mat-card-content>
         </mat-card>

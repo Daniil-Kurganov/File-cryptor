@@ -2,6 +2,7 @@ package gost2814789
 
 import (
 	"crypto/rand"
+	"encoding/binary"
 	"math/big"
 )
 
@@ -47,4 +48,45 @@ func moduloReduction[T uint64 | uint32 | int](numberInt, power T, module int) (r
 	numberInPower := numberBig.Exp(numberBig, big.NewInt(int64(power)), nil)
 	_, resultBig := new(big.Int).DivMod(numberInPower, big.NewInt(int64(module)), new(big.Int))
 	return T(resultBig.Int64())
+}
+
+func TextToUint64Slice(text string) (result []uint64) {
+	textByteBuffer := []byte(text)
+	counterSubText := 0
+	for {
+		rightBorder := (counterSubText + 1) * dataBlockLengthByte
+		leftBorder := rightBorder - dataBlockLengthByte
+		if rightBorder >= len(textByteBuffer) {
+			byteTextTail := textByteBuffer[leftBorder:]
+			for {
+				if len(byteTextTail) == dataBlockLengthByte {
+					break
+				}
+				byteTextTail = append([]byte{0}, byteTextTail...)
+			}
+			result = append(result, binary.LittleEndian.Uint64(byteTextTail))
+			break
+		}
+		result = append(result, binary.LittleEndian.Uint64(textByteBuffer[leftBorder:rightBorder]))
+		counterSubText += 1
+	}
+	return
+}
+
+func Uint64SliceToText(numbers []uint64) string {
+	var textByteBuffer []byte
+	for currentIndex, currentNumber := range numbers {
+		feelBuffer := [dataBlockLengthByte]byte{}
+		binary.LittleEndian.PutUint64(feelBuffer[:], currentNumber)
+		if currentIndex == len(numbers)-1 {
+			for _, currentByte := range feelBuffer {
+				if currentByte != 0 {
+					textByteBuffer = append(textByteBuffer, currentByte)
+				}
+			}
+		} else {
+			textByteBuffer = append(textByteBuffer, feelBuffer[:]...)
+		}
+	}
+	return string(textByteBuffer)
 }
